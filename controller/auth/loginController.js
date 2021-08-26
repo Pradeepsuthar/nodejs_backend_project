@@ -1,18 +1,15 @@
-import Joi from 'joi';
 import { User, RefreshToken } from '../../models';
 import { CustomErrorHandler, JwtService } from '../../services';
 import bcrypt from 'bcrypt';
 import { REFRESH_SECRET } from '../../config';
+import { loginSchema, refreshSchema } from '../../validators';
 
 const loginController = {
+
+    // Login User
     async login(req, res, next) {
 
         // Validation
-        const loginSchema = Joi.object({
-            email: Joi.string().email().required(),
-            password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-        });
-
         const { error } = loginSchema.validate(req.body);
 
         if (error) {
@@ -45,13 +42,10 @@ const loginController = {
 
     },
 
+    // Logout User
     async logout(req, res, next) {
 
         // validation
-        const refreshSchema = Joi.object({
-            refresh_token: Joi.string().required(),
-        });
-
         const { error } = refreshSchema.validate(req.body);
 
         if (error) {
@@ -64,7 +58,7 @@ const loginController = {
             return next(new Error('Something went wrong in the database'));
         }
 
-        res.json({ status: 1 });
+        res.json({ message: "User logout successfully!" });
 
     }
 };

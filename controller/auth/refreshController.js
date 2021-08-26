@@ -1,14 +1,11 @@
-import Joi from 'joi';
 import { REFRESH_SECRET } from '../../config';
 import { RefreshToken, User } from '../../models';
 import { CustomErrorHandler, JwtService } from '../../services';
+import { refreshSchema } from '../../validators';
 
 const refreshController = {
     async refresh(req, res, next) {
         // validation
-        const refreshSchema = Joi.object({
-            refresh_token: Joi.string().required(),
-        });
         const { error } = refreshSchema.validate(req.body);
 
         if (error) {

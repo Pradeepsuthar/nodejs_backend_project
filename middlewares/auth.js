@@ -2,6 +2,7 @@ import CustomErrorHandler from '../services/CustomErrorHandler';
 import JwtService from '../services/JwtService';
 
 const isAuthenticated = async (req, res, next) => {
+    
     let authHeader = req.headers.authorization;
 
     if (!authHeader) {

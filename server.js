@@ -13,6 +13,7 @@ mongoose.connect(DB_URL, {
     useUnifiedTopology: true,
     useFindAndModify: false,
 });
+
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', () => {
@@ -24,17 +25,17 @@ app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+
 app.use('/api', router);
+// Save media files here
+app.use('/uploads', express.static('uploads'));
+
 // Welcome page for api
 app.use('/', (req, res) => {
     res.send(`
-  <h1>Welcome to E-commerce Rest APIs</h1>
-  You may contact me <a href="https://codersgyan.com/links/">here</a>
-  Or You may reach out to me for any question related to this Apis: codersgyan@gmail.com
+  <h1>Welcome to E-Commerce Rest APIs</h1>
   `);
 });
-// Save media files here
-app.use('/uploads', express.static('uploads'));
 
 // Middleware for error handling
 app.use(errorHandler);
@@ -43,4 +44,4 @@ app.use(errorHandler);
 const PORT = process.env.PORT || APP_PORT;
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
-})
+});
