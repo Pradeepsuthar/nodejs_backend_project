@@ -24,6 +24,10 @@ class CustomErrorHandler extends Error {
     static serverError(message = 'Internal server error') {
         return new CustomErrorHandler(500, message);
     }
+
+    static productNotFound(message = 'Product not found') {
+        return new CustomErrorHandler(401, message);
+    }
 }
 
 export default CustomErrorHandler;
