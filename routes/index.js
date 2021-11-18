@@ -1,9 +1,7 @@
 import express from 'express';
-import { registerController, loginController, userController, refreshController } from '../controller';
+import { registerController, loginController, userController, refreshController, MasterController , productController} from '../controller';
 import isAuthenticated from '../middlewares/auth';
 import isAdmin from '../middlewares/admin';
-import productController from '../controller/productController';
-import MasterController from '../controller/MasterController';
 
 const router = express.Router();
 
