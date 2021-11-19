@@ -5,14 +5,13 @@ import CustomErrorHandler from '../services/CustomErrorHandler';
 const errorHandler = (err, req, res, next) => {
     
     let statusCode = 500;
-    console.log("Erro is here")
-
+    
     let data = {
         message: 'Internal server error',
         responseCode: statusCode,
         ...(DEBUG_MODE === 'true' && { originalError: err.message })
     }
-
+    
     if (err instanceof ValidationError) {
         statusCode = 422;
         data = {
@@ -20,7 +19,7 @@ const errorHandler = (err, req, res, next) => {
             responseCode: statusCode
         }
     }
-
+    
     if (err instanceof CustomErrorHandler) {
         statusCode = err.status;
         data = {
@@ -28,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
             responseCode: statusCode
         }
     }
-
+    
     return res.status(statusCode).json(data);
 }
 

@@ -1,5 +1,6 @@
-module.exports = {
+MasterController = {
 
+    // Get Static States
     Get_States: async (req, res) => {
         const states = [
             {
@@ -154,6 +155,7 @@ module.exports = {
         return res.send({ responseCode: 200, data: states, msg: "States Fetched" });
     },
 
+    // Get Static Cities
     Get_Cities: async (req, res) => {
         const cities = [
             {
@@ -1474,6 +1476,8 @@ module.exports = {
             },
         ];
         return res.send({ responseCode: 200, data: cities, msg: "Cities Fetched" });
-    }
+    },
 
 }
+
+module.exports = MasterController;

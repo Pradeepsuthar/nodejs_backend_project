@@ -1,12 +1,11 @@
 import { Product, ProductImages } from '../models';
 import multer from 'multer';
 import path from 'path';
-import { CustomErrorHandler } from '../services';
-import fs from 'fs';
+import { CustomErrorHandler, MasterService } from '../services';
 import productSchema from '../validators/productValidator';
 import productImagesSchema from '../validators/productImagesValidator';
 
-const storage = multer.diskStorage({
+const storageProducts = multer.diskStorage({
     destination: (req, file, cb) => cb(null, 'uploads/products'),
     filename: (req, file, cb) => {
         const uniqueName = `${Date.now()}-${Math.round(
@@ -19,24 +18,15 @@ const storage = multer.diskStorage({
 
 // Save product thumbnail
 const handleMultipartData = multer({
-    storage,
+    storageProducts,
     limits: { fileSize: 1000000 * 2 },
 }).single('thumbnail'); // 2mb
 
 // Save Products images
 const saveProductImage = multer({
-    storage,
+    storageProducts,
     limits: { fileSize: 1000000 * 5 },
 }).single('image'); // 5mb
-
-
-// Delete files from file system
-function delet_file_from_sys(filePath) {
-    const image_URL = `${appRoot}/${filePath}`;
-    fs.unlink(image_URL, (err) => {
-        if (err) { return next(CustomErrorHandler.serverError(err.message)); }
-    });
-}
 
 const productController = {
 
@@ -53,7 +43,7 @@ const productController = {
 
             if (error) {
                 // Delete the uploaded file
-                delet_file_from_sys(filePath);
+                MasterService.Delet_File_From_System(filePath);
                 return next(error);
                 // rootfolder/uploads/products/filename.png
             }
@@ -97,7 +87,7 @@ const productController = {
 
             if (error) {
                 // Delete the uploaded file
-                if (req.file) { delet_file_from_sys(filePath); }
+                if (req.file) { MasterService.Delet_File_From_System(filePath); }
                 return next(error);
             }
 
@@ -147,13 +137,13 @@ const productController = {
 
             const productThumbnailPath = product._doc.thumbnail;
 
-            delet_file_from_sys(productThumbnailPath);
+            MasterService.Delet_File_From_System(productThumbnailPath);
 
             // Delete all product images after delete the product
             for (let image of product_Images_List) {
                 const imageDoc = await ProductImages.findOneAndRemove({ _id: image._id });
                 const imagePath = imageDoc._doc.image;
-                delet_file_from_sys(imagePath);
+                MasterService.Delet_File_From_System(imagePath);
             }
 
             return res.json({ responseCode: 200, message: "Product delete successfully!" });
@@ -213,7 +203,7 @@ const productController = {
 
             if (error) {
                 // Delete the uploaded file
-                delet_file_from_sys(filePath);
+                MasterService.Delet_File_From_System(filePath);
                 return next(error);
                 // rootfolder/uploads/products/filename.png
             }
@@ -248,7 +238,7 @@ const productController = {
         const imagePath = productImage._doc.image;
 
         // image delete
-        delet_file_from_sys(imagePath);
+        MasterService.Delet_File_From_System(imagePath);
 
         return res.json({ responseCode: 200, message: "Product image delete successfully!" });
 
