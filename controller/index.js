@@ -4,3 +4,4 @@ export { default as refreshController } from './auth/refreshController';
 export { default as userController } from './auth/userController';
 export { default as productController } from './productController';
 export { default as MasterController } from './MasterController';
+export { default as PaymentController } from './PaymentController';
